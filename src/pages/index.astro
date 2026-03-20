@@ -1,0 +1,188 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const today = new Date();
+const launchDate = new Date('2026-03-20');
+const issueNumber = Math.max(1, Math.floor((today.getTime() - launchDate.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      .issue-bar {
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #888;
+        padding: 0.6rem 0 0.8rem;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 1.5rem;
+      }
+
+      .hero-section {
+        text-align: center;
+        padding: 1.5rem 0 1rem;
+        border-bottom: 3px double #1a3a5c;
+        margin-bottom: 1.5rem;
+      }
+      .hero-headline {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        line-height: 1.15;
+        color: #1a3a5c;
+        margin: 0 0 0.5rem;
+      }
+      .hero-subline {
+        font-style: italic;
+        font-size: 1rem;
+        color: #666;
+      }
+
+      .articles-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+      .main-article {
+        border-right: 1px solid #ccc;
+        padding-right: 2rem;
+      }
+      .sidebar-articles {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .category-label {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #c9a84c;
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+      .article-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.7rem;
+        font-weight: 700;
+        line-height: 1.15;
+        margin: 0.2rem 0 0.7rem;
+      }
+      .article-title a { color: #1a3a5c; text-decoration: none; }
+      .article-title a:hover { color: #c9a84c; }
+      .article-desc {
+        font-size: 0.98rem;
+        color: #444;
+        line-height: 1.6;
+      }
+      .article-date {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        color: #999;
+        margin-top: 0.5rem;
+      }
+
+      .sidebar-article .article-title { font-size: 1.05rem; }
+      .sidebar-article .article-desc { font-size: 0.85rem; }
+
+      .divider { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
+
+      .newsletter-box {
+        background: #1a3a5c;
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        border-radius: 4px;
+        margin: 2rem 0;
+      }
+      .newsletter-box h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        color: #c9a84c;
+        margin: 0 0 0.5rem;
+      }
+      .newsletter-box p {
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.8);
+        margin: 0 0 1rem;
+      }
+      .newsletter-box a {
+        background: #c9a84c;
+        color: #1a3a5c;
+        padding: 0.6rem 1.5rem;
+        border-radius: 3px;
+        text-decoration: none;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      @media (max-width: 600px) {
+        .articles-grid { grid-template-columns: 1fr; }
+        .main-article { border-right: none; padding-right: 0; border-bottom: 1px solid #ccc; padding-bottom: 1.5rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="issue-bar">Ausgabe {issueNumber} · Schweizer Aktien &amp; Finanznews · täglich aktualisiert</div>
+
+      <section class="hero-section">
+        <h2 class="hero-headline">Schweizer Aktien im Fokus</h2>
+        <p class="hero-subline">Marktöffnung, Mittagsupdate und Hintergrundanalysen — täglich neu.</p>
+      </section>
+
+      {posts.length > 0 && (
+        <section class="articles-grid">
+          <article class="main-article">
+            <span class="category-label">Aktuell</span>
+            <h3 class="article-title">
+              <a href={`/blog/${posts[0].id}/`}>{posts[0].data.title}</a>
+            </h3>
+            <p class="article-desc">{posts[0].data.description}</p>
+            <p class="article-date"><FormattedDate date={posts[0].data.pubDate} /></p>
+          </article>
+          <aside class="sidebar-articles">
+            {posts.slice(1, 5).map((post) => (
+              <article class="sidebar-article">
+                <span class="category-label">News</span>
+                <h3 class="article-title">
+                  <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                </h3>
+                <p class="article-desc">{post.data.description?.substring(0, 90)}…</p>
+              </article>
+            ))}
+          </aside>
+        </section>
+      )}
+
+      <hr class="divider" />
+
+      <div class="newsletter-box">
+        <h3>📈 SPI-Strategie Newsletter</h3>
+        <p>Erhalte wöchentlich die Bollinger-Signale für Schweizer Aktien — kostenlos in deinem Postfach.</p>
+        <a href="mailto:admin@oliverwidmer.net?subject=Newsletter%20FinPost">Jetzt abonnieren</a>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
