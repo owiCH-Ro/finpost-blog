@@ -4,114 +4,64 @@ import HeaderLink from './HeaderLink.astro';
 ---
 
 <header>
-  <div class="masthead">
-    <div class="masthead-top">
-      <span class="tagline">Schweizer Aktien & Finanznews</span>
-      <span class="current-date" id="current-date"></span>
-    </div>
-    <div class="masthead-title">
-      <a href="/">{SITE_TITLE}</a>
-    </div>
-    <div class="masthead-divider"></div>
-  </div>
-  <nav>
-    <HeaderLink href="/">Aktuell</HeaderLink>
-    <HeaderLink href="/spi-strategie">SPI-Strategie</HeaderLink>
-    <HeaderLink href="/about">Über uns</HeaderLink>
-    <HeaderLink href="mailto:admin@oliverwidmer.net">Kontakt</HeaderLink>
-  </nav>
+	<nav>
+		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<div class="internal-links">
+			<HeaderLink href="/">Aktuell</HeaderLink>
+			<HeaderLink href="/about">Über uns</HeaderLink>
+			<HeaderLink href="mailto:admin@oliverwidmer.net">Kontakt</HeaderLink>
+			<span class="current-date" id="current-date"></span>
+		</div>
+	</nav>
 </header>
 
 <script>
-  const el = document.getElementById('current-date');
-  if (el) {
-    const now = new Date();
-    el.textContent = now.toLocaleDateString('de-CH', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-  }
+	const el = document.getElementById('current-date');
+	if (el) {
+		const now = new Date();
+		el.textContent = now.toLocaleDateString('de-CH', {
+			weekday: 'long',
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric'
+		});
+	}
 </script>
 
 <style>
-  header {
-    margin: 0;
-    padding: 0;
-    background: white;
-    border-bottom: 3px solid #1a3a5c;
-  }
-
-  .masthead {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 1em;
-  }
-
-  .masthead-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.4em 0;
-    border-bottom: 1px solid #e5e9f0;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75em;
-    color: #888;
-  }
-
-  .tagline { font-style: italic; }
-
-  .masthead-title {
-    text-align: center;
-    padding: 0.3em 0 0.4em;
-  }
-
-  .masthead-title a {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.8em;
-    font-weight: 900;
-    color: #1a3a5c;
-    text-decoration: none;
-    letter-spacing: -1px;
-  }
-
-  .masthead-title a:hover { color: #c9a84c; }
-
-  .masthead-divider {
-    border-top: 3px double #1a3a5c;
-    margin-bottom: 0;
-  }
-
-  nav {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 1em;
-    display: flex;
-    gap: 0;
-    background: #1a3a5c;
-  }
-
-  nav :global(a) {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.82em;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.85) !important;
-    padding: 0.6em 1em;
-    text-decoration: none;
-    border-bottom: none !important;
-  }
-
-  nav :global(a:hover),
-  nav :global(a.active) {
-    color: #c9a84c !important;
-    background: rgba(255,255,255,0.05);
-    border-bottom: none !important;
-  }
-
-  @media (max-width: 600px) {
-    .masthead-title a { font-size: 2em; }
-  }
+	header {
+		margin: 0;
+		padding: 0 1em;
+		background: white;
+		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+	}
+	h2 {
+		margin: 0;
+		font-size: 1em;
+	}
+	h2 a,
+	h2 a.active {
+		text-decoration: none;
+	}
+	nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	nav a {
+		padding: 1em 0.5em;
+		color: var(--black);
+		border-bottom: 4px solid transparent;
+		text-decoration: none;
+	}
+	nav a.active {
+		text-decoration: none;
+		border-bottom-color: var(--accent);
+	}
+	.current-date {
+		font-size: 0.8em;
+		color: #888;
+		padding: 1em 0.5em;
+		white-space: nowrap;
+	}
 </style>
