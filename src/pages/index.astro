@@ -16,6 +16,26 @@ const formattedDate = `${dayNames[today.getDay()]}, ${today.getDate()}. ${monthN
 
 const launchDate = new Date('2026-03-20');
 const issueNumber = Math.max(1, Math.floor((today.getTime() - launchDate.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+
+// Gruppiere alle Posts nach Datum für das Archiv
+const dayNamesFull = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const monthNamesFull = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+
+const groupedMap = new Map<string, typeof posts>();
+for (const post of posts) {
+	const key = post.data.pubDate.toISOString().split('T')[0];
+	if (!groupedMap.has(key)) groupedMap.set(key, []);
+	groupedMap.get(key)!.push(post);
+}
+const archivedDays = Array.from(groupedMap.entries())
+	.sort((a, b) => b[0].localeCompare(a[0]))
+	.map(([dateKey, dayPosts]) => {
+		const d = new Date(dateKey + 'T12:00:00');
+		return {
+			label: `${dayNamesFull[d.getDay()]}, ${d.getDate()}. ${monthNamesFull[d.getMonth()]} ${d.getFullYear()}`,
+			posts: dayPosts
+		};
+	});
 ---
 
 <!doctype html>
@@ -166,6 +186,90 @@ const issueNumber = Math.max(1, Math.floor((today.getTime() - launchDate.getTime
 				font-size: inherit;
 			}
 
+			/* Archive section */
+			.archive-section {
+				margin-top: 2.5rem;
+			}
+			.archive-section-title {
+				font-family: 'Playfair Display', Georgia, serif;
+				font-size: 1.1rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				margin: 0 0 1rem;
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+			}
+			.archive-section-title::after {
+				content: '';
+				flex: 1;
+				height: 1px;
+				background: #111;
+			}
+			.archive-day {
+				margin-bottom: 2rem;
+			}
+			.archive-day-header {
+				font-size: 0.75rem;
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				color: #666;
+				border-bottom: 1px solid #ddd;
+				padding-bottom: 0.3rem;
+				margin-bottom: 0.8rem;
+			}
+			.archive-list {
+				display: flex;
+				flex-direction: column;
+				gap: 0.6rem;
+			}
+			.archive-item {
+				display: flex;
+				justify-content: space-between;
+				align-items: baseline;
+				gap: 1rem;
+				padding: 0.4rem 0;
+				border-bottom: 1px dotted #e0e0e0;
+			}
+			.archive-item:last-child {
+				border-bottom: none;
+			}
+			.archive-item-left {
+				display: flex;
+				align-items: baseline;
+				gap: 0.8rem;
+				flex: 1;
+				min-width: 0;
+			}
+			.archive-item-badge {
+				font-size: 0.62rem;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				color: #8b0000;
+				white-space: nowrap;
+				min-width: 80px;
+			}
+			.archive-item a {
+				font-family: 'Playfair Display', Georgia, serif;
+				font-size: 1rem;
+				color: #111;
+				text-decoration: none;
+				line-height: 1.3;
+			}
+			.archive-item a:hover {
+				color: #8b0000;
+				text-decoration: underline;
+			}
+			.archive-item-desc {
+				font-size: 0.82rem;
+				color: #666;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-width: 280px;
+			}
+
 			/* Responsive */
 			@media (max-width: 720px) {
 				.masthead-title { font-size: 3rem; }
@@ -177,6 +281,8 @@ const issueNumber = Math.max(1, Math.floor((today.getTime() - launchDate.getTime
 					border-bottom: 1px solid #ccc;
 					padding-bottom: 1.5rem;
 				}
+				.archive-item { flex-direction: column; gap: 0.2rem; }
+				.archive-item-desc { display: none; }
 			}
 		</style>
 	</head>
@@ -234,6 +340,33 @@ const issueNumber = Math.max(1, Math.floor((today.getTime() - launchDate.getTime
 			)}
 
 			<hr class="divider-double" style="margin-top: 2rem;" />
+
+			<!-- Archive: alle Beiträge nach Datum gruppiert -->
+			{posts.length > 1 && (
+				<section class="archive-section">
+					<h2 class="archive-section-title">Alle Beiträge</h2>
+					{archivedDays.map((day) => (
+						<div class="archive-day">
+							<div class="archive-day-header">{day.label}</div>
+							<div class="archive-list">
+								{day.posts.map((post) => (
+									<div class="archive-item">
+										<div class="archive-item-left">
+											<span class="archive-item-badge">{post.data.category ?? 'News'}</span>
+											<a href={`/blog/${post.id}/`}>{post.data.title}</a>
+										</div>
+										{post.data.description && (
+											<span class="archive-item-desc">{post.data.description.substring(0, 60)}…</span>
+										)}
+									</div>
+								))}
+							</div>
+						</div>
+					))}
+				</section>
+			)}
+
+			<hr class="divider-single" style="margin-top: 1rem;" />
 		</main>
 		<Footer />
 	</body>
