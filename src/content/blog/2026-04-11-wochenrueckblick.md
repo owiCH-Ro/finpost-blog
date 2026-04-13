@@ -1,5 +1,5 @@
 ---
-title: 'Wochenrückblick KW 15: Waffenstillstand im Iran beflügelt Schweizer Börse – SMI springt über 13'000'
+title: "Wochenrückblick KW 15: Waffenstillstand im Iran beflügelt Schweizer Börse – SMI springt über 13'000"
 description: 'Die Einigung auf einen zweiwöchigen Waffenstillstand zwischen den USA und dem Iran löst eine Erholungsrally am Schweizer Aktienmarkt aus. Der SMI gewinnt rund 3 Prozent, doch die Erleichterung trügt möglicherweise.'
 pubDate: 2026-04-11
 heroImage: '/blog-placeholder-3.jpg'

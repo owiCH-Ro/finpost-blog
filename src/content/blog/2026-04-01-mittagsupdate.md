@@ -1,6 +1,6 @@
 ---
 title: '📊 Mittagsupdate — 1. April 2026'
-description: 'SMI erholt sich mit +1.73% auf 12\'998 Punkte — Erholung nach turbulentstem Quartal seit Jahren'
+description: "SMI erholt sich mit +1.73% auf 12'998 Punkte — Erholung nach turbulentstem Quartal seit Jahren"
 pubDate: '2026-04-01'
 heroImage: ''
 tags: ['Mittagsupdate', 'SPI', 'SMI']
