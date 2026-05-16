@@ -1,6 +1,6 @@
 ---
 title: '📊 Mittagsupdate — 17. April 2026'
-description: 'SMI klettert auf 13'236 Punkte – Partners Group und Sika an der Spitze, Centiel springt +25% beim SIX-Debüt.'
+description: "SMI klettert auf 13'236 Punkte – Partners Group und Sika an der Spitze, Centiel springt +25% beim SIX-Debüt."
 pubDate: '2026-04-17'
 heroImage: ''
 tags: ['Mittagsupdate', 'SPI', 'SMI']
